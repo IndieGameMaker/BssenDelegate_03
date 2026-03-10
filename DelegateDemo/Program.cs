@@ -15,17 +15,13 @@ class Program
 {
     static void Main(string[] args)
     {
-        
-        
         // 플레이어 생성(플레이어 클래스 인스턴스 생성)
         Player player = new Player("Zack", 100);
         
         // 이벤트를 구독(Subscribe)
         // 무명 델리게이트
-        player.OnHpChanged += delegate(int damage, int hp)
-        {
-            Console.WriteLine($"데미지 {damage}, HP: {hp}");
-        };
+        // 람다식  (=> goes to, 람다)
+        player.OnHpChanged += PlayerDamaged;
         
         // 플레이어 사망 메소드 호출
         // 이벤트를 외부 클래스에서 직접 호출할 수 없다.
@@ -35,7 +31,16 @@ class Program
         player.TakeDamage(40);
         player.TakeDamage(40);
         
-        
+        // 이벤트 해지(Unsubscribe) : 메모리 해제
+        player.OnHpChanged -= PlayerDamaged;
+    }
+
+    static void PlayerDamaged(int damage, int hp)
+    {
+        // 피격 이펙트 처리
+        // 피격 사운드 처리
+        // 애니메이션 처리
+        Console.WriteLine($"데미지 {damage}, HP: {hp}");
     }
 }
 

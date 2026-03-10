@@ -22,9 +22,9 @@ class Program
         
         // 이벤트를 구독(Subscribe)
         // 무명 델리게이트
-        player.OnHpChanged += delegate
+        player.OnHpChanged += delegate(int damage, int hp)
         {
-            Console.WriteLine($"플레이어 HP 변경됨");
+            Console.WriteLine($"데미지 {damage}, HP: {hp}");
         };
         
         // 플레이어 사망 메소드 호출
@@ -57,7 +57,7 @@ class Player
     // public delegate void HpChangedHandler();
     // public event HpChangedHandler OnHpChanged;
     
-    public event Action OnHpChanged;
+    public event Action<int, int> OnHpChanged;
 
     public Player(string name, int hp)
     {
@@ -76,7 +76,7 @@ class Player
     {
         _hp -= damage;
         
-        OnHpChanged?.Invoke(); // 이벤트 발생 Raise
+        OnHpChanged?.Invoke(damage, _hp); // 이벤트 발생 Raise
         
         if (_hp <= 0)
         {

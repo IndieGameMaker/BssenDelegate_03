@@ -29,6 +29,9 @@ class Program
         
         player.TakeDamage(20);
         player.TakeDamage(40);
+        
+        player.Heal(30);
+        
         player.TakeDamage(40);
         
         // 이벤트 해지(Unsubscribe) : 메모리 해제
@@ -63,6 +66,14 @@ class Player
     // public event HpChangedHandler OnHpChanged;
     
     public event Action<int, int> OnHpChanged;
+    
+    // Func 델리게이트
+    /*
+     * Func<T1, T2, TResult> 
+     * Func<int, float, int> => Func<현재HP, 회복비율, 회복HP>
+     */
+    public event Func<int, int, int> OnHealing = (currHp, healAmount) => currHp += healAmount;
+    
 
     public Player(string name, int hp)
     {
@@ -72,6 +83,13 @@ class Player
         OnPlayerDie += Die;
     }
 
+    public void Heal(int healAmount)
+    {
+        _hp = OnHealing(_hp, healAmount);
+        Console.WriteLine($"HP 회복: {_hp} [회복량: {healAmount}]");
+    }
+    
+    
     public void Die()
     {
         Console.WriteLine("플레이어 사망");
